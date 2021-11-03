@@ -1,0 +1,419 @@
+{
+  "workflow": {
+    "unique_name": "definition_workflow_01PS8IPKGRMLM4SBCSvH0gnwesjU3qZn8tK",
+    "name": "Kenna - Get Asset ID",
+    "title": "Kenna - Get Asset ID",
+    "type": "generic.workflow",
+    "base_type": "workflow",
+    "variables": [
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "local",
+          "name": "queryString",
+          "type": "datatype.string",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01PS8IPK9R0662ku9ADc8ZVuR7SBEyA85AZ",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "IP Address",
+          "type": "datatype.string",
+          "description": "IP address of the endpoint to search for",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01PS8IPK9R66Y2BEb7Y8U7A2lDvLElV4byo",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "output",
+          "name": "KennaAssetID",
+          "type": "datatype.string",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01PS8IPK9R3L269zIcQU2goRpLrLSYiDn6p",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "output",
+          "name": "KennaRistMeterScore",
+          "type": "datatype.string",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01PTVXBB5KND75BUTvXgYenVZxZKbNQKFXF",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.secure_string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "Kenna Token",
+          "type": "datatype.secure_string",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01PS8LSUQ76794WfR3wDHTdsIkruw3GNBPF",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "Hostname",
+          "type": "datatype.string",
+          "description": "Hostname of the endpoint to search for",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01PS8IPK9R4WQ7CEfRNcb0gZ9KOUdHbN142",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "output",
+          "name": "KennaAssetPriority",
+          "type": "datatype.string",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01PTVXMF3MWL03evno651ND2vziQ4pQcKhg",
+        "object_type": "variable_workflow"
+      }
+    ],
+    "properties": {
+      "atomic": {
+        "atomic_group": "Kenna",
+        "is_atomic": true
+      },
+      "delete_workflow_instance": true,
+      "description": "Searches Kenna for the given IP address or hostname and returns the assets's ID, Priority and Rist Meter Score.\n\n[] Build the search query based on the input provided\n[] Query AMP for matching computers\n[] If a match is found, return its GUID",
+      "display_name": "Kenna - Get Asset ID",
+      "runtime_user": {
+        "override_target_runtime_user": false,
+        "specify_on_workflow_start": false,
+        "target_default": true
+      },
+      "target": {
+        "target_type": "web-service.endpoint",
+        "specify_on_workflow_start": true
+      }
+    },
+    "object_type": "definition_workflow",
+    "actions": [
+      {
+        "unique_name": "definition_activity_01PS8IPUG9Q823stkIMkCxLkW67s3Q3Oqlp",
+        "name": "Condition Block",
+        "title": "Was input provided?",
+        "type": "logic.if_else",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "Was input provided?",
+          "skip_execution": false
+        },
+        "object_type": "definition_activity",
+        "blocks": [
+          {
+            "unique_name": "definition_activity_01PS8IPYPNFB35CYTQzEQqMnvbgK6EAkJLa",
+            "name": "Condition Branch",
+            "title": "IP Address",
+            "type": "logic.condition_block",
+            "base_type": "activity",
+            "properties": {
+              "condition": {
+                "left_operand": "$workflow.definition_workflow_01PS8IPKGRMLM4SBCSvH0gnwesjU3qZn8tK.input.variable_workflow_01PS8IPK9R66Y2BEb7Y8U7A2lDvLElV4byo$",
+                "operator": "mregex",
+                "right_operand": "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
+              },
+              "continue_on_failure": false,
+              "display_name": "IP Address",
+              "skip_execution": false
+            },
+            "object_type": "definition_activity",
+            "actions": [
+              {
+                "unique_name": "definition_activity_01PS8IQ0RVZFH6KXdtEstNSpZ8tvBcBVAYP",
+                "name": "Set Variables",
+                "title": "Set Query String (IP)",
+                "type": "core.set_multiple_variables",
+                "base_type": "activity",
+                "properties": {
+                  "continue_on_failure": false,
+                  "display_name": "Set Query String (IP)",
+                  "skip_execution": false,
+                  "variables_to_update": [
+                    {
+                      "variable_to_update": "$workflow.definition_workflow_01PS8IPKGRMLM4SBCSvH0gnwesjU3qZn8tK.local.variable_workflow_01PS8IPK9R0662ku9ADc8ZVuR7SBEyA85AZ$",
+                      "variable_value_new": "ip:$workflow.definition_workflow_01PS8IPKGRMLM4SBCSvH0gnwesjU3qZn8tK.input.variable_workflow_01PS8IPK9R66Y2BEb7Y8U7A2lDvLElV4byo$"
+                    }
+                  ]
+                },
+                "object_type": "definition_activity"
+              }
+            ]
+          },
+          {
+            "unique_name": "definition_activity_01PS8IQ5D479M3ruaVAzoNijbHgmqWta0qm",
+            "name": "Condition Branch",
+            "title": "Hostname",
+            "type": "logic.condition_block",
+            "base_type": "activity",
+            "properties": {
+              "condition": {
+                "left_operand": "$workflow.definition_workflow_01PS8IPKGRMLM4SBCSvH0gnwesjU3qZn8tK.input.variable_workflow_01PS8IPK9R4WQ7CEfRNcb0gZ9KOUdHbN142$",
+                "operator": "mregex",
+                "right_operand": "^[a-zA-Z0-9\\-\\_]+(\\.[a-zA-Z0-9\\-\\_]+){0,}$"
+              },
+              "continue_on_failure": false,
+              "display_name": "Hostname",
+              "skip_execution": false
+            },
+            "object_type": "definition_activity",
+            "actions": [
+              {
+                "unique_name": "definition_activity_01PS8IQ8F3YH86dzKRl0N0QgSraACVe2Nw5",
+                "name": "Set Variables",
+                "title": "Set Query String (Hostname)",
+                "type": "core.set_multiple_variables",
+                "base_type": "activity",
+                "properties": {
+                  "continue_on_failure": false,
+                  "display_name": "Set Query String (Hostname)",
+                  "skip_execution": false,
+                  "variables_to_update": [
+                    {
+                      "variable_to_update": "$workflow.definition_workflow_01PS8IPKGRMLM4SBCSvH0gnwesjU3qZn8tK.local.variable_workflow_01PS8IPK9R0662ku9ADc8ZVuR7SBEyA85AZ$",
+                      "variable_value_new": "hostname:\"$workflow.definition_workflow_01PS8IPKGRMLM4SBCSvH0gnwesjU3qZn8tK.input.variable_workflow_01PS8IPK9R4WQ7CEfRNcb0gZ9KOUdHbN142$\""
+                    }
+                  ]
+                },
+                "object_type": "definition_activity"
+              }
+            ]
+          },
+          {
+            "unique_name": "definition_activity_01PS8IQEYLM2G0urK6QiG8ydpESvuLFiKQj",
+            "name": "Condition Branch",
+            "title": "Neither",
+            "type": "logic.condition_block",
+            "base_type": "activity",
+            "properties": {
+              "condition": {
+                "left_operand": "$workflow.definition_workflow_01PS8IPKGRMLM4SBCSvH0gnwesjU3qZn8tK.input.variable_workflow_01PS8IPK9R4WQ7CEfRNcb0gZ9KOUdHbN142$",
+                "operator": "eq",
+                "right_operand": "$workflow.definition_workflow_01PS8IPKGRMLM4SBCSvH0gnwesjU3qZn8tK.input.variable_workflow_01PS8IPK9R4WQ7CEfRNcb0gZ9KOUdHbN142$"
+              },
+              "continue_on_failure": false,
+              "display_name": "Neither",
+              "skip_execution": false
+            },
+            "object_type": "definition_activity",
+            "actions": [
+              {
+                "unique_name": "definition_activity_01PS8IQH4Q9LF4SnG1Df47DjfI2xEAtN9hD",
+                "name": "Failed",
+                "title": "Completed",
+                "type": "logic.completed",
+                "base_type": "activity",
+                "properties": {
+                  "completion_type": "failed-completed",
+                  "display_name": "Failed",
+                  "result_message": "Either both input fields were left blank or an invalid input value was provided"
+                },
+                "object_type": "definition_activity"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "unique_name": "definition_activity_01PS8IQLJ1WH16Hn1JkzU5CQ96kgSpniYM8",
+        "name": "HTTP Request",
+        "title": "Kenna - Get Asset",
+        "type": "web-service.http_request",
+        "base_type": "activity",
+        "properties": {
+          "accept": "application/json",
+          "action_timeout": 30,
+          "allow_auto_redirect": true,
+          "content_type": "application/json",
+          "continue_on_error_status_code": false,
+          "continue_on_failure": false,
+          "custom_headers": [
+            {
+              "name": "X-Risk-Token",
+              "value": "$workflow.definition_workflow_01PS8IPKGRMLM4SBCSvH0gnwesjU3qZn8tK.input.variable_workflow_01PS8LSUQ76794WfR3wDHTdsIkruw3GNBPF$"
+            }
+          ],
+          "display_name": "Kenna - Get Asset",
+          "method": "GET",
+          "relative_url": "/assets/search?q=$workflow.definition_workflow_01PS8IPKGRMLM4SBCSvH0gnwesjU3qZn8tK.local.variable_workflow_01PS8IPK9R0662ku9ADc8ZVuR7SBEyA85AZ$",
+          "runtime_user": {
+            "override_target_runtime_user": false,
+            "target_default": true
+          },
+          "skip_execution": false,
+          "target": {
+            "override_workflow_target": false,
+            "override_workflow_target_group_criteria": false,
+            "use_workflow_target": true,
+            "use_workflow_target_group": false
+          }
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01PS8IQQ4QRZY27rg5XiWKT9E43wUfhbWW0",
+        "name": "Condition Block",
+        "title": "Did the request succeed?",
+        "type": "logic.if_else",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "Did the request succeed?",
+          "skip_execution": false
+        },
+        "object_type": "definition_activity",
+        "blocks": [
+          {
+            "unique_name": "definition_activity_01PS8IQUL4A5N14yTBYSjADnGR7bSc2947v",
+            "name": "Condition Branch",
+            "title": "Success/200",
+            "type": "logic.condition_block",
+            "base_type": "activity",
+            "properties": {
+              "condition": {
+                "left_operand": "$activity.definition_activity_01PS8IQLJ1WH16Hn1JkzU5CQ96kgSpniYM8.output.status_code$",
+                "operator": "eq",
+                "right_operand": 200
+              },
+              "continue_on_failure": false,
+              "display_name": "Success/200",
+              "skip_execution": false
+            },
+            "object_type": "definition_activity",
+            "actions": [
+              {
+                "unique_name": "definition_activity_01PS8IQWRCJO33R7qBraCETP4mxERLeDzNc",
+                "name": "JSONPath Query",
+                "title": "Get the first asset details",
+                "type": "corejava.jsonpathquery",
+                "base_type": "activity",
+                "properties": {
+                  "action_timeout": 180,
+                  "continue_on_failure": false,
+                  "display_name": "Get the first asset details",
+                  "input_json": "$activity.definition_activity_01PS8IQLJ1WH16Hn1JkzU5CQ96kgSpniYM8.output.response_body$",
+                  "jsonpath_queries": [
+                    {
+                      "jsonpath_query": "$.assets[0].id",
+                      "jsonpath_query_name": "kennaAssetID",
+                      "jsonpath_query_type": "string"
+                    },
+                    {
+                      "jsonpath_query": "$.assets[0].priority",
+                      "jsonpath_query_name": "kenna AssetPriority",
+                      "jsonpath_query_type": "string"
+                    },
+                    {
+                      "jsonpath_query": "$.assets[0].risk_meter_score",
+                      "jsonpath_query_name": "kennaRiskMeterScore",
+                      "jsonpath_query_type": "string"
+                    }
+                  ],
+                  "skip_execution": false
+                },
+                "object_type": "definition_activity"
+              },
+              {
+                "unique_name": "definition_activity_01PS8IR1UO42P7VpbEUlYP1ioLm2LTgK7Xy",
+                "name": "Set Variables",
+                "title": "Set Variables",
+                "type": "core.set_multiple_variables",
+                "base_type": "activity",
+                "properties": {
+                  "continue_on_failure": false,
+                  "display_name": "Set Variables",
+                  "skip_execution": false,
+                  "variables_to_update": [
+                    {
+                      "variable_to_update": "$workflow.definition_workflow_01PS8IPKGRMLM4SBCSvH0gnwesjU3qZn8tK.output.variable_workflow_01PS8IPK9R3L269zIcQU2goRpLrLSYiDn6p$",
+                      "variable_value_new": "$activity.definition_activity_01PS8IQWRCJO33R7qBraCETP4mxERLeDzNc.output.jsonpath_queries.kennaAssetID$"
+                    },
+                    {
+                      "variable_to_update": "$workflow.definition_workflow_01PS8IPKGRMLM4SBCSvH0gnwesjU3qZn8tK.output.variable_workflow_01PTVXMF3MWL03evno651ND2vziQ4pQcKhg$",
+                      "variable_value_new": "$activity.definition_activity_01PS8IQWRCJO33R7qBraCETP4mxERLeDzNc.output.jsonpath_queries.kenna AssetPriority$"
+                    },
+                    {
+                      "variable_to_update": "$workflow.definition_workflow_01PS8IPKGRMLM4SBCSvH0gnwesjU3qZn8tK.output.variable_workflow_01PTVXBB5KND75BUTvXgYenVZxZKbNQKFXF$",
+                      "variable_value_new": "$activity.definition_activity_01PS8IQWRCJO33R7qBraCETP4mxERLeDzNc.output.jsonpath_queries.kennaRiskMeterScore$"
+                    }
+                  ]
+                },
+                "object_type": "definition_activity"
+              }
+            ]
+          },
+          {
+            "unique_name": "definition_activity_01PS8IR6YMMD95OPQzUEuWoC3ZYaSvZk2Zb",
+            "name": "Condition Branch",
+            "title": "Failure/Anything Else",
+            "type": "logic.condition_block",
+            "base_type": "activity",
+            "properties": {
+              "condition": {
+                "left_operand": "$activity.definition_activity_01PS8IQLJ1WH16Hn1JkzU5CQ96kgSpniYM8.output.status_code$",
+                "operator": "ne",
+                "right_operand": 200
+              },
+              "continue_on_failure": false,
+              "display_name": "Failure/Anything Else",
+              "skip_execution": false
+            },
+            "object_type": "definition_activity",
+            "actions": [
+              {
+                "unique_name": "definition_activity_01PS8IR91YFI856wG3sL0u1xdbh5ZSvPbvd",
+                "name": "Failed",
+                "title": "Failed",
+                "type": "logic.completed",
+                "base_type": "activity",
+                "properties": {
+                  "completion_type": "failed-completed",
+                  "continue_on_failure": false,
+                  "display_name": "Failed",
+                  "result_message": "There was an error fetching the asset from Kenna",
+                  "skip_execution": false
+                },
+                "object_type": "definition_activity"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "categories": [
+      "category_1BMfMXSnJMyt5Ihqi7rWJr5N8cf"
+    ]
+  }
+}
