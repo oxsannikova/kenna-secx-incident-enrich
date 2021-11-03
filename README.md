@@ -9,6 +9,7 @@ This workflow periodically checks SecureX incidents for Threat Detected Events f
 **Targets:** CTR_For_Access_Token, Private_CTIA_Target, Kenna_Target
 
 **Steps:**
+
 [] Fetch incidents from SecureX
 
 [] For each incident:
