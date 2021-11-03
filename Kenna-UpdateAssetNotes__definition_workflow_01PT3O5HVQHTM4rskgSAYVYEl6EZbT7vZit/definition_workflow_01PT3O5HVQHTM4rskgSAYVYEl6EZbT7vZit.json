@@ -1,0 +1,264 @@
+{
+  "workflow": {
+    "unique_name": "definition_workflow_01PT3O5HVQHTM4rskgSAYVYEl6EZbT7vZit",
+    "name": "Kenna - Update Asset Notes",
+    "title": "Kenna - Update Asset Notes",
+    "type": "generic.workflow",
+    "base_type": "workflow",
+    "variables": [
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "Notes",
+          "type": "datatype.string",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01PT3O5HLXV9V10Eo2wD5jgVmtmgP931p0n",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "output",
+          "name": "Body",
+          "type": "datatype.string",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01PT3O5HLXQHM53s9FvjokDUuY6taBoBWcV",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.secure_string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "Kenna Token",
+          "type": "datatype.secure_string",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01PT3O5HLXTY75iivLCGFvcjBE7mkV6elJI",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "Asset ID",
+          "type": "datatype.string",
+          "description": "IP address of the endpoint to search for",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01PT3O5HLXWHR5m4E9DfXtGATVEEbMdZjZ3",
+        "object_type": "variable_workflow"
+      }
+    ],
+    "properties": {
+      "atomic": {
+        "atomic_group": "Kenna",
+        "is_atomic": true
+      },
+      "delete_workflow_instance": true,
+      "description": "Updates a single asset's attributes (notes) by ID.\n\n[] Update asset notes by the given asset ID.\n[] If successful, resturns JSON response body.",
+      "display_name": "Kenna - Update Asset Notes",
+      "runtime_user": {
+        "override_target_runtime_user": false,
+        "specify_on_workflow_start": false,
+        "target_default": true
+      },
+      "target": {
+        "target_type": "web-service.endpoint",
+        "specify_on_workflow_start": true
+      }
+    },
+    "object_type": "definition_workflow",
+    "actions": [
+      {
+        "unique_name": "definition_activity_01PT3O5R4YG037EHiSvBsLytkXcxxgYeuuJ",
+        "name": "Condition Block",
+        "title": "Was input provided?",
+        "type": "logic.if_else",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "Was input provided?",
+          "skip_execution": false
+        },
+        "object_type": "definition_activity",
+        "blocks": [
+          {
+            "unique_name": "definition_activity_01PT3O5V3M0SL18ULJlGWX1pFp3zFCzPn3a",
+            "name": "Condition Branch",
+            "title": "No",
+            "type": "logic.condition_block",
+            "base_type": "activity",
+            "properties": {
+              "condition": {
+                "left_operand": "$workflow.definition_workflow_01PT3O5HVQHTM4rskgSAYVYEl6EZbT7vZit.input.variable_workflow_01PT3O5HLXWHR5m4E9DfXtGATVEEbMdZjZ3$",
+                "operator": "eq",
+                "right_operand": ""
+              },
+              "continue_on_failure": false,
+              "display_name": "No",
+              "skip_execution": false
+            },
+            "object_type": "definition_activity",
+            "actions": [
+              {
+                "unique_name": "definition_activity_01PT3O5X3Q5QL0NL3r1nbXSDNnKHraK4ok9",
+                "name": "Completed",
+                "title": "Completed",
+                "type": "logic.completed",
+                "base_type": "activity",
+                "properties": {
+                  "completion_type": "failed-completed",
+                  "continue_on_failure": false,
+                  "display_name": "Completed",
+                  "result_message": "CVE ID was not provided.",
+                  "skip_execution": false
+                },
+                "object_type": "definition_activity"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "unique_name": "definition_activity_01PT3O618KWA278WllRCG73OGWHMUXcOojA",
+        "name": "HTTP Request",
+        "title": "Kenna - Update Asset Notes",
+        "type": "web-service.http_request",
+        "base_type": "activity",
+        "properties": {
+          "accept": "application/json",
+          "action_timeout": 30,
+          "allow_auto_redirect": true,
+          "body": "{\n      \"asset\":\n        {\n          \"notes\" : \"$workflow.definition_workflow_01PT3O5HVQHTM4rskgSAYVYEl6EZbT7vZit.input.variable_workflow_01PT3O5HLXV9V10Eo2wD5jgVmtmgP931p0n$\"\n        }\n}",
+          "content_type": "application/json",
+          "continue_on_error_status_code": false,
+          "continue_on_failure": false,
+          "custom_headers": [
+            {
+              "name": "X-Risk-Token",
+              "value": "$workflow.definition_workflow_01PT3O5HVQHTM4rskgSAYVYEl6EZbT7vZit.input.variable_workflow_01PT3O5HLXTY75iivLCGFvcjBE7mkV6elJI$"
+            }
+          ],
+          "display_name": "Kenna - Update Asset Notes",
+          "method": "PUT",
+          "relative_url": "/assets/$workflow.definition_workflow_01PT3O5HVQHTM4rskgSAYVYEl6EZbT7vZit.input.variable_workflow_01PT3O5HLXWHR5m4E9DfXtGATVEEbMdZjZ3$",
+          "runtime_user": {
+            "override_target_runtime_user": false,
+            "target_default": true
+          },
+          "skip_execution": false,
+          "target": {
+            "override_workflow_target": false,
+            "override_workflow_target_group_criteria": false,
+            "use_workflow_target": true,
+            "use_workflow_target_group": false
+          }
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01PT3O65ICH9G11hA2NSxyM9eueaN9waOie",
+        "name": "Condition Block",
+        "title": "Did the request succeed?",
+        "type": "logic.if_else",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "Did the request succeed?",
+          "skip_execution": false
+        },
+        "object_type": "definition_activity",
+        "blocks": [
+          {
+            "unique_name": "definition_activity_01PT3O69RP2IM4flHaPNsRtBtTxoakOmJyU",
+            "name": "Condition Branch",
+            "title": "Success/204",
+            "type": "logic.condition_block",
+            "base_type": "activity",
+            "properties": {
+              "condition": {
+                "left_operand": "$activity.definition_activity_01PT3O618KWA278WllRCG73OGWHMUXcOojA.output.status_code$",
+                "operator": "eq",
+                "right_operand": 204
+              },
+              "continue_on_failure": false,
+              "display_name": "Success/204",
+              "skip_execution": false
+            },
+            "object_type": "definition_activity",
+            "actions": [
+              {
+                "unique_name": "definition_activity_01PT3O6C4CUK33dCFwdTjzyHvaeKtBRGxzy",
+                "name": "Set Variables",
+                "title": "Set Variables",
+                "type": "core.set_multiple_variables",
+                "base_type": "activity",
+                "properties": {
+                  "continue_on_failure": false,
+                  "display_name": "Set Variables",
+                  "skip_execution": false,
+                  "variables_to_update": [
+                    {
+                      "variable_to_update": "$workflow.definition_workflow_01PT3O5HVQHTM4rskgSAYVYEl6EZbT7vZit.output.variable_workflow_01PT3O5HLXQHM53s9FvjokDUuY6taBoBWcV$",
+                      "variable_value_new": "$activity.definition_activity_01PT3O618KWA278WllRCG73OGWHMUXcOojA.output.response_body$"
+                    }
+                  ]
+                },
+                "object_type": "definition_activity"
+              }
+            ]
+          },
+          {
+            "unique_name": "definition_activity_01PT3O6HMGDW474NUeF5q41HVPDTI9IHt0T",
+            "name": "Condition Branch",
+            "title": "Failure/Anything Else",
+            "type": "logic.condition_block",
+            "base_type": "activity",
+            "properties": {
+              "condition": {
+                "left_operand": "$activity.definition_activity_01PT3O618KWA278WllRCG73OGWHMUXcOojA.output.status_code$",
+                "operator": "ne",
+                "right_operand": 200
+              },
+              "continue_on_failure": false,
+              "display_name": "Failure/Anything Else",
+              "skip_execution": false
+            },
+            "object_type": "definition_activity",
+            "actions": [
+              {
+                "unique_name": "definition_activity_01PT3O6JRRH8W5vNBl4XdcsDDXbxvCWRiZR",
+                "name": "Failed",
+                "title": "Failed",
+                "type": "logic.completed",
+                "base_type": "activity",
+                "properties": {
+                  "completion_type": "failed-completed",
+                  "continue_on_failure": false,
+                  "display_name": "Failed",
+                  "result_message": "There was an error fetching the malware hashes from Kenna. CVE ID: $workflow.definition_workflow_01PT3O5HVQHTM4rskgSAYVYEl6EZbT7vZit.input.variable_workflow_01PT3O5HLXWHR5m4E9DfXtGATVEEbMdZjZ3$\nStatus Code: $activity.definition_activity_01PT3O618KWA278WllRCG73OGWHMUXcOojA.output.status_code$\nResponse Body: $activity.definition_activity_01PT3O618KWA278WllRCG73OGWHMUXcOojA.output.response_body$",
+                  "skip_execution": false
+                },
+                "object_type": "definition_activity"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "categories": [
+      "category_1BMfMXSnJMyt5Ihqi7rWJr5N8cf"
+    ]
+  }
+}
