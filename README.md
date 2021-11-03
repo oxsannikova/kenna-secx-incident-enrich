@@ -10,9 +10,15 @@ This workflow periodically checks SecureX incidents for Threat Detected Events f
 
 **Steps:**
 [] Fetch incidents from SecureX
+
 [] For each incident:
+
 []> Extract the observations and target
+
 []> Search for the asset in Kenna by IP and fetch its asset ID
+
 []> Fetch asset risk score, priority and vulnerabilities by asset ID
+
 []> Find all malware associated with open vulnerabilities matching criteria: malware exploitable, has active new breaches and popular targets.
+
 []> Compare with malware in the SecureX incident. If match found, update the incident with Kenna information. Add tags and notes to Kenna asset to link with the incident.
