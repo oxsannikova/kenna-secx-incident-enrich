@@ -1,8 +1,8 @@
 {
   "workflow": {
     "unique_name": "definition_workflow_01PT1JRLJ5QHH3Fb3lctaK2Uqk40TuL4ldW",
-    "name": "Kenna - Show Vilnerability Definition",
-    "title": "Kenna - Show Vilnerability Definition",
+    "name": "Kenna - Show Vulnerability Definition",
+    "title": "Kenna - Show Vulnerability Definition",
     "type": "generic.workflow",
     "base_type": "workflow",
     "variables": [
@@ -54,7 +54,7 @@
       },
       "delete_workflow_instance": true,
       "description": "Searches Kenna for Vulnerability Definition for a given CVE ID. \n\n[] Build the search query based on the input provided\n[] Query Kenna for matching vulnerabilty\n[] If a match is found, return vulberability definition",
-      "display_name": "Kenna - Show Vilnerability Definition",
+      "display_name": "Kenna - Show Vulnerability Definition",
       "runtime_user": {
         "override_target_runtime_user": false,
         "specify_on_workflow_start": false,
