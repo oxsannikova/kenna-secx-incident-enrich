@@ -73,11 +73,11 @@ This workflow periodically checks SecureX incidents for Threat Detected Events f
 
 1. In the left pane menu, select **Workflows**. Click on **IMPORT** to import the workflow:
 
-![](screenshots/import-workflow.png)
+![](assets/import-workflow.png)
 
-2. Click on **Browse** and copy paste the content of the [Kenna-GetAssetID json file]https://raw.githubusercontent.com/oxsannikova/kenna-secx-incident-enrich/main/Kenna-GetAssetID__definition_workflow_01PS8IPKGRMLM4SBCSvH0gnwesjU3qZn8tK/definition_workflow_01PS8IPKGRMLM4SBCSvH0gnwesjU3qZn8tK.json) file inside of the text window. Select **IMPORT AS A NEW WORKFLOW (CLONE)** and click on **IMPORT**.
+2. Click on **Browse** and copy paste the content of the [Kenna-GetAssetID json file](https://raw.githubusercontent.com/oxsannikova/kenna-secx-incident-enrich/main/Kenna-GetAssetID__definition_workflow_01PS8IPKGRMLM4SBCSvH0gnwesjU3qZn8tK/definition_workflow_01PS8IPKGRMLM4SBCSvH0gnwesjU3qZn8tK.json) file inside of the text window. Select **IMPORT AS A NEW WORKFLOW (CLONE)** and click on **IMPORT**.
 
-![](screenshots/copy-paste.png)
+![](assets/copy-paste.png)
 
 3. Repeat step 2 for the rest of Atomic actions: [Kenna-GetAssetVulnerabilities](https://raw.githubusercontent.com/oxsannikova/kenna-secx-incident-enrich/main/Kenna-GetAssetVulnerabilities__definition_workflow_01PS92J4863DX7ifHF01heFerwmqnoTJ2YI/definition_workflow_01PS92J4863DX7ifHF01heFerwmqnoTJ2YI.json), [Kenna-ShowMalwareHashes](https://raw.githubusercontent.com/oxsannikova/kenna-secx-incident-enrich/main/Kenna-ShowMalwareHashes__definition_workflow_01PSAG3UACQ1N38Q4Bns45cYWo4hpBsqNGv/definition_workflow_01PSAG3UACQ1N38Q4Bns45cYWo4hpBsqNGv.json), [Kenna-ShowVulnerabilityDefinition](https://raw.githubusercontent.com/oxsannikova/kenna-secx-incident-enrich/main/Kenna-ShowVilnerabilityDefinition__definition_workflow_01PT1JRLJ5QHH3Fb3lctaK2Uqk40TuL4ldW/definition_workflow_01PT1JRLJ5QHH3Fb3lctaK2Uqk40TuL4ldW.json), [Kenna-TagAnAsset](https://raw.githubusercontent.com/oxsannikova/kenna-secx-incident-enrich/main/Kenna-TagAnAsset__definition_workflow_01PT35JR1M1EX3nOhjfiu2AXQ7u1scMmHmf/definition_workflow_01PT35JR1M1EX3nOhjfiu2AXQ7u1scMmHmf.json), [Kenna-UpdateAssetNotes](https://raw.githubusercontent.com/oxsannikova/kenna-secx-incident-enrich/main/Kenna-UpdateAssetNotes__definition_workflow_01PT3O5HVQHTM4rskgSAYVYEl6EZbT7vZit/definition_workflow_01PT3O5HVQHTM4rskgSAYVYEl6EZbT7vZit.json).
 
