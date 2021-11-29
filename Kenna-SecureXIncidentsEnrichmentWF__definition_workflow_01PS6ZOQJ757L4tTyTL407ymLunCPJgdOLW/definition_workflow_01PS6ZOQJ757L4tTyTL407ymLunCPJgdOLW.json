@@ -20,19 +20,6 @@
         "object_type": "variable_workflow"
       },
       {
-        "schema_id": "datatype.string",
-        "properties": {
-          "value": "",
-          "scope": "local",
-          "name": "Incident Description",
-          "type": "datatype.string",
-          "is_required": false,
-          "is_invisible": false
-        },
-        "unique_name": "variable_workflow_01PT277QNZSAX3vguU9ksdo2sHBzYuhCOmu",
-        "object_type": "variable_workflow"
-      },
-      {
         "schema_id": "datatype.date",
         "properties": {
           "value": "0001-01-01T00:00:00+00:00",
@@ -43,6 +30,19 @@
           "is_invisible": false
         },
         "unique_name": "variable_workflow_01PS75QFFR7XJ3xGz7GrK5OPwKd5WtZmUQE",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "local",
+          "name": "Incident Description",
+          "type": "datatype.string",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01PT277QNZSAX3vguU9ksdo2sHBzYuhCOmu",
         "object_type": "variable_workflow"
       },
       {
@@ -718,44 +718,6 @@
                         "object_type": "definition_activity"
                       },
                       {
-                        "unique_name": "definition_activity_01SIIEC6C5KHD30xAAoyJx2OEv9My2yV47T",
-                        "name": "Kenna - Get Asset ID",
-                        "title": "Kenna - Get Asset ID",
-                        "type": "workflow.atomic_workflow",
-                        "base_type": "subworkflow",
-                        "properties": {
-                          "continue_on_failure": false,
-                          "display_name": "Kenna - Get Asset ID",
-                          "input": {
-                            "variable_workflow_01PS8IPK9R4WQ7CEfRNcb0gZ9KOUdHbN142": "$activity.definition_activity_01PS80K4CWH4G3kz0Mvc434uapM8yIIPoc4.output.jsonpath_queries.hostname$",
-                            "variable_workflow_01PS8IPK9R66Y2BEb7Y8U7A2lDvLElV4byo": "",
-                            "variable_workflow_01PS8LSUQ76794WfR3wDHTdsIkruw3GNBPF": "$global.variable_01PS8DTLTYVDC03EIERUrWMxDm7MYmIqwpW.global.variable_01PS8DTLTYVDC03EIERUrWMxDm7MYmIqwpW$"
-                          },
-                          "runtime_user": {
-                            "target_default": true
-                          },
-                          "skip_execution": true,
-                          "target": {
-                            "override_workflow_target_group_criteria": true,
-                            "target_group": {
-                              "run_on_all_targets": false,
-                              "use_criteria": {
-                                "choose_target_using_algorithm": "choose_first_with_matching_criteria",
-                                "conditions": [
-                                  {
-                                    "left_operand": "$targetgroup.web-service endpoint.input.display_name$",
-                                    "operator": "eq",
-                                    "right_operand": "Kenna_Target"
-                                  }
-                                ]
-                              }
-                            }
-                          },
-                          "workflow_id": "definition_workflow_01PS8IPKGRMLM4SBCSvH0gnwesjU3qZn8tK"
-                        },
-                        "object_type": "definition_activity"
-                      },
-                      {
                         "unique_name": "definition_activity_01PS9AY42L1ZS78ldZn6f56jtvj5aUvbax0",
                         "name": "Kenna - Get Asset Vulnerabilities",
                         "title": "Kenna - Get Asset Vulnerabilities",
@@ -1188,6 +1150,41 @@
       "category_1BMfMXSnJMyt5Ihqi7rWJr5N8cf"
     ]
   },
+  "triggers": {
+    "triggerschedule_01SOKZXB0N9W32T73Qxw0ZrM23XsTW1F4Ju": {
+      "workflow_id": "definition_workflow_01PS6ZOQJ757L4tTyTL407ymLunCPJgdOLW",
+      "name": "Kenna - SecureX Enrich Trigger",
+      "title": "",
+      "lowercase_name": "schedule.kenna_-_securex_enrich_trigger",
+      "type": "schedule",
+      "base_type": "trigger",
+      "ref_id": "schedule_01I2FJ1I9Y94V75zzzRsmdshv4Zh5n7TpgB",
+      "version": "1.0.0",
+      "disabled": true,
+      "unique_name": "triggerschedule_01SOKZXB0N9W32T73Qxw0ZrM23XsTW1F4Ju",
+      "object_type": "triggerschedule"
+    }
+  },
+  "schedules": {
+    "schedule_01I2FJ1I9Y94V75zzzRsmdshv4Zh5n7TpgB": {
+      "unique_name": "schedule_01I2FJ1I9Y94V75zzzRsmdshv4Zh5n7TpgB",
+      "name": "Every 5 Minutes",
+      "type": "basic.schedule",
+      "base_type": "schedule",
+      "properties": {
+        "calendar": "calendar_recurring_1BMfMWvgiDhSjBQ7hTSyvz3NyVZ",
+        "timezone": "Etc/GMT+0",
+        "starttime": "00:00",
+        "interval_hours": 0,
+        "interval_minutes": 5,
+        "number_of_times": 288,
+        "display_name": "Every 5 Minutes",
+        "description": ""
+      },
+      "version": "1.0.0",
+      "object_type": "schedule"
+    }
+  },
   "target_groups": {
     "target_group_01EJ0TQWPQWBD0qiWqClJKj9FOzwiZRfOFH": {
       "unique_name": "target_group_01EJ0TQWPQWBD0qiWqClJKj9FOzwiZRfOFH",
@@ -1226,12 +1223,12 @@
     }
   },
   "atomic_workflows": [
-    "definition_workflow_01PS8IPKGRMLM4SBCSvH0gnwesjU3qZn8tK",
+    "definition_workflow_01PP75S3LTBW4420OZU3rdHWKHFnE6aC7yH",
     "definition_workflow_01PS92J4863DX7ifHF01heFerwmqnoTJ2YI",
     "definition_workflow_01PSAG3UACQ1N38Q4Bns45cYWo4hpBsqNGv",
-    "definition_workflow_01PP75S3LTBW4420OZU3rdHWKHFnE6aC7yH",
-    "definition_workflow_01PT3O5HVQHTM4rskgSAYVYEl6EZbT7vZit",
     "definition_workflow_01PT1JRLJ5QHH3Fb3lctaK2Uqk40TuL4ldW",
-    "definition_workflow_01PT35JR1M1EX3nOhjfiu2AXQ7u1scMmHmf"
+    "definition_workflow_01PT35JR1M1EX3nOhjfiu2AXQ7u1scMmHmf",
+    "definition_workflow_01PS8IPKGRMLM4SBCSvH0gnwesjU3qZn8tK",
+    "definition_workflow_01PT3O5HVQHTM4rskgSAYVYEl6EZbT7vZit"
   ]
 }
