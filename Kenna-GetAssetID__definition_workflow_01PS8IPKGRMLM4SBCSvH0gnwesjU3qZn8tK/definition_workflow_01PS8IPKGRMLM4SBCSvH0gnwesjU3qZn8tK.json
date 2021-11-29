@@ -10,13 +10,14 @@
         "schema_id": "datatype.string",
         "properties": {
           "value": "",
-          "scope": "local",
-          "name": "queryString",
+          "scope": "input",
+          "name": "Hostname",
           "type": "datatype.string",
+          "description": "Hostname of the endpoint to search for",
           "is_required": false,
           "is_invisible": false
         },
-        "unique_name": "variable_workflow_01PS8IPK9R0662ku9ADc8ZVuR7SBEyA85AZ",
+        "unique_name": "variable_workflow_01PS8IPK9R4WQ7CEfRNcb0gZ9KOUdHbN142",
         "object_type": "variable_workflow"
       },
       {
@@ -31,6 +32,32 @@
           "is_invisible": false
         },
         "unique_name": "variable_workflow_01PS8IPK9R66Y2BEb7Y8U7A2lDvLElV4byo",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.secure_string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "Kenna Token",
+          "type": "datatype.secure_string",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01PS8LSUQ76794WfR3wDHTdsIkruw3GNBPF",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "local",
+          "name": "queryString",
+          "type": "datatype.string",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01PS8IPK9R0662ku9ADc8ZVuR7SBEyA85AZ",
         "object_type": "variable_workflow"
       },
       {
@@ -51,39 +78,12 @@
         "properties": {
           "value": "",
           "scope": "output",
-          "name": "KennaRistMeterScore",
+          "name": "KennaAssetPriority",
           "type": "datatype.string",
           "is_required": false,
           "is_invisible": false
         },
-        "unique_name": "variable_workflow_01PTVXBB5KND75BUTvXgYenVZxZKbNQKFXF",
-        "object_type": "variable_workflow"
-      },
-      {
-        "schema_id": "datatype.secure_string",
-        "properties": {
-          "value": "",
-          "scope": "input",
-          "name": "Kenna Token",
-          "type": "datatype.secure_string",
-          "is_required": true,
-          "is_invisible": false
-        },
-        "unique_name": "variable_workflow_01PS8LSUQ76794WfR3wDHTdsIkruw3GNBPF",
-        "object_type": "variable_workflow"
-      },
-      {
-        "schema_id": "datatype.string",
-        "properties": {
-          "value": "",
-          "scope": "input",
-          "name": "Hostname",
-          "type": "datatype.string",
-          "description": "Hostname of the endpoint to search for",
-          "is_required": false,
-          "is_invisible": false
-        },
-        "unique_name": "variable_workflow_01PS8IPK9R4WQ7CEfRNcb0gZ9KOUdHbN142",
+        "unique_name": "variable_workflow_01PTVXMF3MWL03evno651ND2vziQ4pQcKhg",
         "object_type": "variable_workflow"
       },
       {
@@ -91,12 +91,12 @@
         "properties": {
           "value": "",
           "scope": "output",
-          "name": "KennaAssetPriority",
+          "name": "KennaRistMeterScore",
           "type": "datatype.string",
           "is_required": false,
           "is_invisible": false
         },
-        "unique_name": "variable_workflow_01PTVXMF3MWL03evno651ND2vziQ4pQcKhg",
+        "unique_name": "variable_workflow_01PTVXBB5KND75BUTvXgYenVZxZKbNQKFXF",
         "object_type": "variable_workflow"
       }
     ],
@@ -106,7 +106,7 @@
         "is_atomic": true
       },
       "delete_workflow_instance": true,
-      "description": "Searches Kenna for the given IP address or hostname and returns the assets's ID, Priority and Rist Meter Score.\n\n[] Build the search query based on the input provided\n[] Query AMP for matching computers\n[] If a match is found, return its GUID",
+      "description": "Searches Kenna for the given IP address or hostname and returns the assets's ID, Priority and Risk Meter Score.\n\n[] Build the search query based on the input provided\n[] Query AMP for matching computers\n[] If a match is found, return its GUID",
       "display_name": "Kenna - Get Asset ID",
       "runtime_user": {
         "override_target_runtime_user": false,
