@@ -96,7 +96,7 @@ In order to leverage Kenna Security malware intelligence for detected vulnerabil
 ## Notes
 
 * Please test this properly before implementing in a production environment. This is a sample workflow!
-* In a future version capability X will be added.
+* In order to leverage Kenna Security malware intelligence for detected vulnerabilities, Kenna Security VI+ License is required.
 
 ## Author(s)
 
