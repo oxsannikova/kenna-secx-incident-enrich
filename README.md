@@ -11,6 +11,10 @@ This workflow periodically checks SecureX incidents for Threat Detected Events f
 
 > **Note:** Please test this properly before implementing in a production environment. This is a sample workflow!
 
+## Preprequisites
+
+In order to leverage Kenna Security malware intelligence for detected vulnerabilities, Kenna Security VI+ License is required.
+
 ## Steps
 
 [] Fetch incidents from SecureX
@@ -23,7 +27,7 @@ This workflow periodically checks SecureX incidents for Threat Detected Events f
 
 []> Fetch asset risk score, priority and vulnerabilities by asset ID
 
-[]> Find all malware associated with open vulnerabilities matching criteria: malware exploitable, has active new breaches and popular targets.
+[]> Find all malware associated with open vulnerabilities matching criteria: malware exploitable, has active new breaches and popular targets. (Kenna Security VI+ License required)
 
 []> Compare with malware in the SecureX incident. If match found, update the incident with Kenna information. Add tags and notes to Kenna asset to link with the incident.
 
