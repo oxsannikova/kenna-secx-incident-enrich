@@ -7,16 +7,16 @@
     "base_type": "workflow",
     "variables": [
       {
-        "schema_id": "datatype.secure_string",
+        "schema_id": "datatype.string",
         "properties": {
           "value": "",
           "scope": "local",
-          "name": "Threat Response Access Token",
-          "type": "datatype.secure_string",
+          "name": "Incident Description",
+          "type": "datatype.string",
           "is_required": false,
           "is_invisible": false
         },
-        "unique_name": "variable_workflow_01PS75GH823PI3BNxnqF5WMiYmulKI9S45M",
+        "unique_name": "variable_workflow_01PT277QNZSAX3vguU9ksdo2sHBzYuhCOmu",
         "object_type": "variable_workflow"
       },
       {
@@ -33,16 +33,16 @@
         "object_type": "variable_workflow"
       },
       {
-        "schema_id": "datatype.string",
+        "schema_id": "datatype.secure_string",
         "properties": {
           "value": "",
           "scope": "local",
-          "name": "Incident Description",
-          "type": "datatype.string",
+          "name": "Threat Response Access Token",
+          "type": "datatype.secure_string",
           "is_required": false,
           "is_invisible": false
         },
-        "unique_name": "variable_workflow_01PT277QNZSAX3vguU9ksdo2sHBzYuhCOmu",
+        "unique_name": "variable_workflow_01PS75GH823PI3BNxnqF5WMiYmulKI9S45M",
         "object_type": "variable_workflow"
       },
       {
@@ -55,7 +55,7 @@
           "is_required": false,
           "is_invisible": false
         },
-        "unique_name": "variable_workflow_01PT2H8TLU2AU4lb9Q2IeWpQTcANMBd5pK1",
+        "unique_name": "variable_workflow_01TBENPN0J1HE6j8VxEBXEioSfb9EcHGWc3",
         "object_type": "variable_workflow"
       }
     ],
@@ -64,7 +64,7 @@
         "is_atomic": false
       },
       "delete_workflow_instance": false,
-      "description": "This workflow periodically checks SecureX incidents for Threat Detected Events from Cisco Secure Endpoint. When an incident is returned, the workflow collects all observations from it and reaches to Kenna Security for vulnerabilities information related to executed malware. If information is returned, the workflow updates the incident in SecureX to document the findings. This workflow is designed to run every 5 minutes on a schedule.\n\nTarget Group: Default TargetGroup\n\nTargets: CTR_For_Access_Token, Private_CTIA_Target, Kenna_Target",
+      "description": "This workflow periodically checks SecureX incidents for Threat Detected Events from Cisco Secure Endpoint. When an incident is returned, the workflow collects all observations from it and reaches to Kenna Security for vulnerabilities information related to executed malware. If information is returned, the workflow updates the incident in SecureX to document the findings. This workflow is designed to run every 5 minutes on a schedule.\n\nTarget Group: Default TargetGroup\n\nTargets: CTR_For_Access_Token, Private_CTIA_Target, Kenna_Target\n\nPrerequisites: Kenna VM and VI+ License",
       "display_name": "Kenna - SecureX Incidents Enrichment",
       "runtime_user": {
         "target_default": true
@@ -283,6 +283,21 @@
         },
         "object_type": "definition_activity",
         "actions": [
+          {
+            "unique_name": "definition_activity_01PT225JACRQA5jhAiglTIlz8MS1GO3OL3v",
+            "name": "Match Regex",
+            "title": "Extract the SecureX Incident ID",
+            "type": "core.matchregex",
+            "base_type": "activity",
+            "properties": {
+              "continue_on_failure": false,
+              "display_name": "Extract the SecureX Incident ID",
+              "input_regex": "(incident-[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$",
+              "input_string": "$activity.definition_activity_01PS7JRZD5O184pvsdWucbVMKfz8EdXR5Gl.input.source_array[@].id$",
+              "skip_execution": false
+            },
+            "object_type": "definition_activity"
+          },
           {
             "unique_name": "definition_activity_01PS7K83LG1B65MLX53uiRh7auWVbHu6HvX",
             "name": "HTTP Request",
@@ -686,7 +701,7 @@
                         "type": "workflow.atomic_workflow",
                         "base_type": "subworkflow",
                         "properties": {
-                          "continue_on_failure": false,
+                          "continue_on_failure": true,
                           "display_name": "Kenna - Get Asset ID",
                           "input": {
                             "variable_workflow_01PS8IPK9R4WQ7CEfRNcb0gZ9KOUdHbN142": "$activity.definition_activity_01PS80K4CWH4G3kz0Mvc434uapM8yIIPoc4.output.jsonpath_queries.hostname$",
@@ -718,13 +733,67 @@
                         "object_type": "definition_activity"
                       },
                       {
+                        "unique_name": "definition_activity_01TBJWPYA19F40ktfHrWplkToUEI5kyFCE6",
+                        "name": "Condition Block",
+                        "title": "Was the Asset found?",
+                        "type": "logic.if_else",
+                        "base_type": "activity",
+                        "properties": {
+                          "continue_on_failure": false,
+                          "display_name": "Was the Asset found?",
+                          "skip_execution": false
+                        },
+                        "object_type": "definition_activity",
+                        "blocks": [
+                          {
+                            "unique_name": "definition_activity_01TBJWPYA22QZ671KrhBEQFlr49CqGM6vW2",
+                            "name": "Condition Branch",
+                            "title": "No",
+                            "type": "logic.condition_block",
+                            "base_type": "activity",
+                            "properties": {
+                              "condition": {
+                                "left_operand": "$activity.definition_activity_01PS8OCVC1XQB3SrURpGSfR1fopur2bS3rn.output.succeeded$",
+                                "operator": "eq",
+                                "right_operand": false
+                              },
+                              "continue_on_failure": false,
+                              "display_name": "No",
+                              "skip_execution": false
+                            },
+                            "object_type": "definition_activity",
+                            "actions": [
+                              {
+                                "unique_name": "definition_activity_01TBJWPYA5I6743yzYuPYrbtVAnm6hmSTML",
+                                "name": "Set Variables",
+                                "title": "Update Incident Describtion",
+                                "type": "core.set_multiple_variables",
+                                "base_type": "activity",
+                                "properties": {
+                                  "continue_on_failure": false,
+                                  "display_name": "Update Incident Describtion",
+                                  "skip_execution": false,
+                                  "variables_to_update": [
+                                    {
+                                      "variable_to_update": "$workflow.definition_workflow_01PS6ZOQJ757L4tTyTL407ymLunCPJgdOLW.local.variable_workflow_01PT277QNZSAX3vguU9ksdo2sHBzYuhCOmu$",
+                                      "variable_value_new": "\\n* Kenna Asset not found for hostname $activity.definition_activity_01PS80K4CWH4G3kz0Mvc434uapM8yIIPoc4.output.jsonpath_queries.hostname$\\n\\n"
+                                    }
+                                  ]
+                                },
+                                "object_type": "definition_activity"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
                         "unique_name": "definition_activity_01PS9AY42L1ZS78ldZn6f56jtvj5aUvbax0",
                         "name": "Kenna - Get Asset Vulnerabilities",
                         "title": "Kenna - Get Asset Vulnerabilities",
                         "type": "workflow.atomic_workflow",
                         "base_type": "subworkflow",
                         "properties": {
-                          "continue_on_failure": false,
+                          "continue_on_failure": true,
                           "display_name": "Kenna - Get Asset Vulnerabilities",
                           "input": {
                             "variable_workflow_01PS92J41IHO25whvZpBMdXBCmi3u8oioyi": "$global.variable_01PS8DTLTYVDC03EIERUrWMxDm7MYmIqwpW.global.variable_01PS8DTLTYVDC03EIERUrWMxDm7MYmIqwpW$",
@@ -762,7 +831,7 @@
                         "base_type": "activity",
                         "properties": {
                           "action_timeout": 180,
-                          "continue_on_failure": false,
+                          "continue_on_failure": true,
                           "display_name": "Get Associated CVEs",
                           "input_json": "$activity.definition_activity_01PS9AY42L1ZS78ldZn6f56jtvj5aUvbax0.output.variable_workflow_01PS92J41IDAD2ySCmpswD0pb4JnKUAMYYT$",
                           "jsonpath_query": "$.vulnerabilities[*]",
@@ -777,6 +846,60 @@
                           ]
                         },
                         "object_type": "definition_activity"
+                      },
+                      {
+                        "unique_name": "definition_activity_01TBEJ80842Q716Ot7iRD3KaXSpoOd4BCjO",
+                        "name": "Condition Block",
+                        "title": "Asset has CVEs?",
+                        "type": "logic.if_else",
+                        "base_type": "activity",
+                        "properties": {
+                          "continue_on_failure": false,
+                          "display_name": "Asset has CVEs?",
+                          "skip_execution": false
+                        },
+                        "object_type": "definition_activity",
+                        "blocks": [
+                          {
+                            "unique_name": "definition_activity_01TBEJ80MSAWM75Nt3pxK4Ue2CrSZntkzLf",
+                            "name": "Condition Branch",
+                            "title": "No",
+                            "type": "logic.condition_block",
+                            "base_type": "activity",
+                            "properties": {
+                              "condition": {
+                                "left_operand": "$activity.definition_activity_01PS9O22KUACT5N1TPWsoaekwAZzhgYZWSW.output.succeeded$",
+                                "operator": "eq",
+                                "right_operand": false
+                              },
+                              "continue_on_failure": false,
+                              "display_name": "No",
+                              "skip_execution": false
+                            },
+                            "object_type": "definition_activity",
+                            "actions": [
+                              {
+                                "unique_name": "definition_activity_01TBII3CT47RQ2tx8m7Ffld8VoDsWQkLTua",
+                                "name": "Set Variables",
+                                "title": "Update Incident Describtion",
+                                "type": "core.set_multiple_variables",
+                                "base_type": "activity",
+                                "properties": {
+                                  "continue_on_failure": false,
+                                  "display_name": "Update Incident Describtion",
+                                  "skip_execution": false,
+                                  "variables_to_update": [
+                                    {
+                                      "variable_to_update": "$workflow.definition_workflow_01PS6ZOQJ757L4tTyTL407ymLunCPJgdOLW.local.variable_workflow_01PT277QNZSAX3vguU9ksdo2sHBzYuhCOmu$",
+                                      "variable_value_new": "\\n* Vulnerabilities not found for Kenna Asset Asset ID: [$activity.definition_activity_01PS8OCVC1XQB3SrURpGSfR1fopur2bS3rn.output.variable_workflow_01PS8IPK9R3L269zIcQU2goRpLrLSYiDn6p$](https://$workflow.definition_workflow_01PS6ZOQJ757L4tTyTL407ymLunCPJgdOLW.local.variable_workflow_01TBENPN0J1HE6j8VxEBXEioSfb9EcHGWc3$/assets/$activity.definition_activity_01PS8OCVC1XQB3SrURpGSfR1fopur2bS3rn.output.variable_workflow_01PS8IPK9R3L269zIcQU2goRpLrLSYiDn6p$). Asset Priority $activity.definition_activity_01PS8OCVC1XQB3SrURpGSfR1fopur2bS3rn.output.variable_workflow_01PTVXMF3MWL03evno651ND2vziQ4pQcKhg$ out of 10. Asset Risk Meter Score $activity.definition_activity_01PS8OCVC1XQB3SrURpGSfR1fopur2bS3rn.output.variable_workflow_01PTVXBB5KND75BUTvXgYenVZxZKbNQKFXF$  out of 1000\\n\\n"
+                                    }
+                                  ]
+                                },
+                                "object_type": "definition_activity"
+                              }
+                            ]
+                          }
+                        ]
                       },
                       {
                         "unique_name": "definition_activity_01PSAIYT5NQYS3TyQN4OUfQ0cWSTah0226I",
@@ -799,7 +922,7 @@
                             "type": "workflow.atomic_workflow",
                             "base_type": "subworkflow",
                             "properties": {
-                              "continue_on_failure": false,
+                              "continue_on_failure": true,
                               "display_name": "Kenna - Show Malware Hashes",
                               "input": {
                                 "variable_workflow_01PSAG3U3ELHL08CBgRRkdUyztmhuUaWxCZ": "$global.variable_01PS8DTLTYVDC03EIERUrWMxDm7MYmIqwpW.global.variable_01PS8DTLTYVDC03EIERUrWMxDm7MYmIqwpW$",
@@ -828,6 +951,60 @@
                               "workflow_id": "definition_workflow_01PSAG3UACQ1N38Q4Bns45cYWo4hpBsqNGv"
                             },
                             "object_type": "definition_activity"
+                          },
+                          {
+                            "unique_name": "definition_activity_01TBKRA3LERS54k9hd2D4Z2YDV4Ybe9ipiJ",
+                            "name": "Condition Block",
+                            "title": "Have we got Malware hashes?",
+                            "type": "logic.if_else",
+                            "base_type": "activity",
+                            "properties": {
+                              "continue_on_failure": false,
+                              "display_name": "Have we got Malware hashes?",
+                              "skip_execution": false
+                            },
+                            "object_type": "definition_activity",
+                            "blocks": [
+                              {
+                                "unique_name": "definition_activity_01TBKRA3LFCTH7ci5PXuOAzVlXMYKfCovlJ",
+                                "name": "Condition Branch",
+                                "title": "No",
+                                "type": "logic.condition_block",
+                                "base_type": "activity",
+                                "properties": {
+                                  "condition": {
+                                    "left_operand": "$activity.definition_activity_01PSAIPRONXSQ2Dyj2IlUH62B3PdFtDzNl9.output.succeeded$",
+                                    "operator": "eq",
+                                    "right_operand": false
+                                  },
+                                  "continue_on_failure": false,
+                                  "display_name": "No",
+                                  "skip_execution": false
+                                },
+                                "object_type": "definition_activity",
+                                "actions": [
+                                  {
+                                    "unique_name": "definition_activity_01TBKRA3LH45619hQK9zejBKkOhwHKEk16Q",
+                                    "name": "Set Variables",
+                                    "title": "Update Incident Describtion",
+                                    "type": "core.set_multiple_variables",
+                                    "base_type": "activity",
+                                    "properties": {
+                                      "continue_on_failure": false,
+                                      "display_name": "Update Incident Describtion",
+                                      "skip_execution": false,
+                                      "variables_to_update": [
+                                        {
+                                          "variable_to_update": "$workflow.definition_workflow_01PS6ZOQJ757L4tTyTL407ymLunCPJgdOLW.local.variable_workflow_01PT277QNZSAX3vguU9ksdo2sHBzYuhCOmu$",
+                                          "variable_value_new": "\\n* Was not able to pull Malware hashes for Kenna Asset Asset ID: [$activity.definition_activity_01PS8OCVC1XQB3SrURpGSfR1fopur2bS3rn.output.variable_workflow_01PS8IPK9R3L269zIcQU2goRpLrLSYiDn6p$](https://$workflow.definition_workflow_01PS6ZOQJ757L4tTyTL407ymLunCPJgdOLW.local.variable_workflow_01TBENPN0J1HE6j8VxEBXEioSfb9EcHGWc3$/assets/$activity.definition_activity_01PS8OCVC1XQB3SrURpGSfR1fopur2bS3rn.output.variable_workflow_01PS8IPK9R3L269zIcQU2goRpLrLSYiDn6p$). Asset Priority $activity.definition_activity_01PS8OCVC1XQB3SrURpGSfR1fopur2bS3rn.output.variable_workflow_01PTVXMF3MWL03evno651ND2vziQ4pQcKhg$ out of 10. Asset Risk Meter Score $activity.definition_activity_01PS8OCVC1XQB3SrURpGSfR1fopur2bS3rn.output.variable_workflow_01PTVXBB5KND75BUTvXgYenVZxZKbNQKFXF$  out of 1000\\n\\n"
+                                        }
+                                      ]
+                                    },
+                                    "object_type": "definition_activity"
+                                  }
+                                ]
+                              }
+                            ]
                           },
                           {
                             "unique_name": "definition_activity_01PSAMQX2HYJX4IxEbFs0ciGUoSCNslP9Dc",
@@ -935,75 +1112,6 @@
                                     "object_type": "definition_activity"
                                   },
                                   {
-                                    "unique_name": "definition_activity_01PT225JACRQA5jhAiglTIlz8MS1GO3OL3v",
-                                    "name": "Match Regex",
-                                    "title": "Extract the SecureX Incident ID",
-                                    "type": "core.matchregex",
-                                    "base_type": "activity",
-                                    "properties": {
-                                      "continue_on_failure": false,
-                                      "display_name": "Extract the SecureX Incident ID",
-                                      "input_regex": "(incident-[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$",
-                                      "input_string": "$activity.definition_activity_01PS7JRZD5O184pvsdWucbVMKfz8EdXR5Gl.input.source_array[@].id$",
-                                      "skip_execution": false
-                                    },
-                                    "object_type": "definition_activity"
-                                  },
-                                  {
-                                    "unique_name": "definition_activity_01PT1WXBVD7YZ0Hi09HnktUFV9XhDsCISfn",
-                                    "name": "HTTP Request",
-                                    "title": "Get SecureX Incident Details",
-                                    "type": "web-service.http_request",
-                                    "base_type": "activity",
-                                    "properties": {
-                                      "accept": "application/json",
-                                      "action_timeout": 180,
-                                      "allow_auto_redirect": true,
-                                      "content_type": "application/json",
-                                      "continue_on_error_status_code": false,
-                                      "continue_on_failure": false,
-                                      "custom_headers": [
-                                        {
-                                          "name": "Authorization",
-                                          "value": "Bearer $workflow.definition_workflow_01PS6ZOQJ757L4tTyTL407ymLunCPJgdOLW.local.variable_workflow_01PS75GH823PI3BNxnqF5WMiYmulKI9S45M$"
-                                        }
-                                      ],
-                                      "display_name": "Get SecureX Incident Details",
-                                      "method": "GET",
-                                      "relative_url": "/ctia/incident/$activity.definition_activity_01PT225JACRQA5jhAiglTIlz8MS1GO3OL3v.output.matching_strings[0]$",
-                                      "runtime_user": {
-                                        "target_default": true
-                                      },
-                                      "skip_execution": false,
-                                      "target": {
-                                        "use_workflow_target_group": true
-                                      }
-                                    },
-                                    "object_type": "definition_activity"
-                                  },
-                                  {
-                                    "unique_name": "definition_activity_01PT269XVPTUW4YHKIptVZ9850a2DApe1Yk",
-                                    "name": "JSONPath Query",
-                                    "title": "Get Incident Description",
-                                    "type": "corejava.jsonpathquery",
-                                    "base_type": "activity",
-                                    "properties": {
-                                      "action_timeout": 180,
-                                      "continue_on_failure": false,
-                                      "display_name": "Get Incident Description",
-                                      "input_json": "$activity.definition_activity_01PT1WXBVD7YZ0Hi09HnktUFV9XhDsCISfn.output.response_body$",
-                                      "jsonpath_queries": [
-                                        {
-                                          "jsonpath_query": "$.description",
-                                          "jsonpath_query_name": "description",
-                                          "jsonpath_query_type": "string"
-                                        }
-                                      ],
-                                      "skip_execution": false
-                                    },
-                                    "object_type": "definition_activity"
-                                  },
-                                  {
                                     "unique_name": "definition_activity_01PT27RGC6OOH5sdPvN1l4Pj6RkomyKqLtr",
                                     "name": "Set Variables",
                                     "title": "Update Incident Description",
@@ -1016,42 +1124,9 @@
                                       "variables_to_update": [
                                         {
                                           "variable_to_update": "$workflow.definition_workflow_01PS6ZOQJ757L4tTyTL407ymLunCPJgdOLW.local.variable_workflow_01PT277QNZSAX3vguU9ksdo2sHBzYuhCOmu$",
-                                          "variable_value_new": "$activity.definition_activity_01PT269XVPTUW4YHKIptVZ9850a2DApe1Yk.output.jsonpath_queries.description$ \\n*  Vulnerability Match found in Kenna:\\n\\n    Asset ID: [$activity.definition_activity_01PS8OCVC1XQB3SrURpGSfR1fopur2bS3rn.output.variable_workflow_01PS8IPK9R3L269zIcQU2goRpLrLSYiDn6p$](https://$workflow.definition_workflow_01PS6ZOQJ757L4tTyTL407ymLunCPJgdOLW.local.variable_workflow_01PT2H8TLU2AU4lb9Q2IeWpQTcANMBd5pK1$/assets/$activity.definition_activity_01PS8OCVC1XQB3SrURpGSfR1fopur2bS3rn.output.variable_workflow_01PS8IPK9R3L269zIcQU2goRpLrLSYiDn6p$). Asset Priority $activity.definition_activity_01PS8OCVC1XQB3SrURpGSfR1fopur2bS3rn.output.variable_workflow_01PTVXMF3MWL03evno651ND2vziQ4pQcKhg$ out of 10. Asset Risk Meter Score $activity.definition_activity_01PS8OCVC1XQB3SrURpGSfR1fopur2bS3rn.output.variable_workflow_01PTVXBB5KND75BUTvXgYenVZxZKbNQKFXF$  out of 1000\\n\\n    Vulnerability: [$activity.definition_activity_01PSAIYT5NQYS3TyQN4OUfQ0cWSTah0226I.input.source_array[@].cve_id$](https://$workflow.definition_workflow_01PS6ZOQJ757L4tTyTL407ymLunCPJgdOLW.local.variable_workflow_01PT2H8TLU2AU4lb9Q2IeWpQTcANMBd5pK1$/intel/$activity.definition_activity_01PT1N0M1MNBU01jYdKASFwNMMTMCE1bK7w.output.jsonpath_queries.id$), Kenna Risk Meter Score $activity.definition_activity_01PT1N0M1MNBU01jYdKASFwNMMTMCE1bK7w.output.jsonpath_queries.risk_meter_score$ out of 100 \\n\\n    CVSS Score: $activity.definition_activity_01PT1N0M1MNBU01jYdKASFwNMMTMCE1bK7w.output.jsonpath_queries.cvss_score$ \\n\\n    Description: $activity.definition_activity_01PT1N0M1MNBU01jYdKASFwNMMTMCE1bK7w.output.jsonpath_queries.cve_description$"
+                                          "variable_value_new": "$workflow.definition_workflow_01PS6ZOQJ757L4tTyTL407ymLunCPJgdOLW.local.variable_workflow_01PT277QNZSAX3vguU9ksdo2sHBzYuhCOmu$\\n* Vulnerability Match found in Kenna:\\n\\n    Asset ID: [$activity.definition_activity_01PS8OCVC1XQB3SrURpGSfR1fopur2bS3rn.output.variable_workflow_01PS8IPK9R3L269zIcQU2goRpLrLSYiDn6p$](https://$workflow.definition_workflow_01PS6ZOQJ757L4tTyTL407ymLunCPJgdOLW.local.variable_workflow_01TBENPN0J1HE6j8VxEBXEioSfb9EcHGWc3$/assets/$activity.definition_activity_01PS8OCVC1XQB3SrURpGSfR1fopur2bS3rn.output.variable_workflow_01PS8IPK9R3L269zIcQU2goRpLrLSYiDn6p$). Asset Priority $activity.definition_activity_01PS8OCVC1XQB3SrURpGSfR1fopur2bS3rn.output.variable_workflow_01PTVXMF3MWL03evno651ND2vziQ4pQcKhg$ out of 10. Asset Risk Meter Score $activity.definition_activity_01PS8OCVC1XQB3SrURpGSfR1fopur2bS3rn.output.variable_workflow_01PTVXBB5KND75BUTvXgYenVZxZKbNQKFXF$  out of 1000\\n\\n    Vulnerability: [$activity.definition_activity_01PSAIYT5NQYS3TyQN4OUfQ0cWSTah0226I.input.source_array[@].cve_id$](https://$workflow.definition_workflow_01PS6ZOQJ757L4tTyTL407ymLunCPJgdOLW.local.variable_workflow_01TBENPN0J1HE6j8VxEBXEioSfb9EcHGWc3$/intel/$activity.definition_activity_01PT1N0M1MNBU01jYdKASFwNMMTMCE1bK7w.output.jsonpath_queries.id$), Kenna Risk Meter Score $activity.definition_activity_01PT1N0M1MNBU01jYdKASFwNMMTMCE1bK7w.output.jsonpath_queries.risk_meter_score$ out of 100 \\n\\n    CVSS Score: $activity.definition_activity_01PT1N0M1MNBU01jYdKASFwNMMTMCE1bK7w.output.jsonpath_queries.cvss_score$ \\n\\n    Description: $activity.definition_activity_01PT1N0M1MNBU01jYdKASFwNMMTMCE1bK7w.output.jsonpath_queries.cve_description$"
                                         }
                                       ]
-                                    },
-                                    "object_type": "definition_activity"
-                                  },
-                                  {
-                                    "unique_name": "definition_activity_01PT2LO0GJCGV0kgMatzab3qXjUzAFgmd7w",
-                                    "name": "HTTP Request",
-                                    "title": "Update SecureX Incident with Vulnerability Details",
-                                    "type": "web-service.http_request",
-                                    "base_type": "activity",
-                                    "properties": {
-                                      "accept": "application/json",
-                                      "action_timeout": 180,
-                                      "allow_auto_redirect": true,
-                                      "body": "{\n  \"description\": \"$workflow.definition_workflow_01PS6ZOQJ757L4tTyTL407ymLunCPJgdOLW.local.variable_workflow_01PT277QNZSAX3vguU9ksdo2sHBzYuhCOmu$\"\n}",
-                                      "content_type": "application/json",
-                                      "continue_on_error_status_code": false,
-                                      "continue_on_failure": false,
-                                      "custom_headers": [
-                                        {
-                                          "name": "Authorization",
-                                          "value": "Bearer $workflow.definition_workflow_01PS6ZOQJ757L4tTyTL407ymLunCPJgdOLW.local.variable_workflow_01PS75GH823PI3BNxnqF5WMiYmulKI9S45M$"
-                                        }
-                                      ],
-                                      "display_name": "Update SecureX Incident with Vulnerability Details",
-                                      "method": "PATCH",
-                                      "relative_url": "/ctia/incident/$activity.definition_activity_01PT225JACRQA5jhAiglTIlz8MS1GO3OL3v.output.matching_strings[0]$",
-                                      "runtime_user": {
-                                        "target_default": true
-                                      },
-                                      "skip_execution": false,
-                                      "target": {
-                                        "use_workflow_target_group": true
-                                      }
                                     },
                                     "object_type": "definition_activity"
                                   },
@@ -1104,7 +1179,7 @@
                                       "display_name": "Kenna - Update Asset Notes",
                                       "input": {
                                         "variable_workflow_01PT3O5HLXTY75iivLCGFvcjBE7mkV6elJI": "$global.variable_01PS8DTLTYVDC03EIERUrWMxDm7MYmIqwpW.global.variable_01PS8DTLTYVDC03EIERUrWMxDm7MYmIqwpW$",
-                                        "variable_workflow_01PT3O5HLXV9V10Eo2wD5jgVmtmgP931p0n": "CVE $activity.definition_activity_01PSAIYT5NQYS3TyQN4OUfQ0cWSTah0226I.input.source_array[@].cve_id$ is linked to SecureX Incident.",
+                                        "variable_workflow_01PT3O5HLXV9V10Eo2wD5jgVmtmgP931p0n": "$activity.definition_activity_01PSAIYT5NQYS3TyQN4OUfQ0cWSTah0226I.input.source_array[@].cve_id$ is linked to SecureX Incident.",
                                         "variable_workflow_01PT3O5HLXWHR5m4E9DfXtGATVEEbMdZjZ3": "$activity.definition_activity_01PS8OCVC1XQB3SrURpGSfR1fopur2bS3rn.output.variable_workflow_01PS8IPK9R3L269zIcQU2goRpLrLSYiDn6p$"
                                       },
                                       "runtime_user": {
@@ -1142,6 +1217,93 @@
                 ]
               }
             ]
+          },
+          {
+            "unique_name": "definition_activity_01PT1WXBVD7YZ0Hi09HnktUFV9XhDsCISfn",
+            "name": "HTTP Request",
+            "title": "Get SecureX Incident Details",
+            "type": "web-service.http_request",
+            "base_type": "activity",
+            "properties": {
+              "accept": "application/json",
+              "action_timeout": 180,
+              "allow_auto_redirect": true,
+              "content_type": "application/json",
+              "continue_on_error_status_code": false,
+              "continue_on_failure": false,
+              "custom_headers": [
+                {
+                  "name": "Authorization",
+                  "value": "Bearer $workflow.definition_workflow_01PS6ZOQJ757L4tTyTL407ymLunCPJgdOLW.local.variable_workflow_01PS75GH823PI3BNxnqF5WMiYmulKI9S45M$"
+                }
+              ],
+              "display_name": "Get SecureX Incident Details",
+              "method": "GET",
+              "relative_url": "/ctia/incident/$activity.definition_activity_01PT225JACRQA5jhAiglTIlz8MS1GO3OL3v.output.matching_strings[0]$",
+              "runtime_user": {
+                "target_default": true
+              },
+              "skip_execution": false,
+              "target": {
+                "use_workflow_target_group": true
+              }
+            },
+            "object_type": "definition_activity"
+          },
+          {
+            "unique_name": "definition_activity_01PT269XVPTUW4YHKIptVZ9850a2DApe1Yk",
+            "name": "JSONPath Query",
+            "title": "Get Incident Description",
+            "type": "corejava.jsonpathquery",
+            "base_type": "activity",
+            "properties": {
+              "action_timeout": 180,
+              "continue_on_failure": false,
+              "display_name": "Get Incident Description",
+              "input_json": "$activity.definition_activity_01PT1WXBVD7YZ0Hi09HnktUFV9XhDsCISfn.output.response_body$",
+              "jsonpath_queries": [
+                {
+                  "jsonpath_query": "$.description",
+                  "jsonpath_query_name": "description",
+                  "jsonpath_query_type": "string"
+                }
+              ],
+              "skip_execution": false
+            },
+            "object_type": "definition_activity"
+          },
+          {
+            "unique_name": "definition_activity_01PT2LO0GJCGV0kgMatzab3qXjUzAFgmd7w",
+            "name": "HTTP Request",
+            "title": "Update SecureX Incident with Vulnerability Details",
+            "type": "web-service.http_request",
+            "base_type": "activity",
+            "properties": {
+              "accept": "application/json",
+              "action_timeout": 180,
+              "allow_auto_redirect": true,
+              "body": "{\n  \"description\": \"$activity.definition_activity_01PT269XVPTUW4YHKIptVZ9850a2DApe1Yk.output.jsonpath_queries.description$$workflow.definition_workflow_01PS6ZOQJ757L4tTyTL407ymLunCPJgdOLW.local.variable_workflow_01PT277QNZSAX3vguU9ksdo2sHBzYuhCOmu$\"\n}",
+              "content_type": "application/json",
+              "continue_on_error_status_code": false,
+              "continue_on_failure": false,
+              "custom_headers": [
+                {
+                  "name": "Authorization",
+                  "value": "Bearer $workflow.definition_workflow_01PS6ZOQJ757L4tTyTL407ymLunCPJgdOLW.local.variable_workflow_01PS75GH823PI3BNxnqF5WMiYmulKI9S45M$"
+                }
+              ],
+              "display_name": "Update SecureX Incident with Vulnerability Details",
+              "method": "PATCH",
+              "relative_url": "/ctia/incident/$activity.definition_activity_01PT225JACRQA5jhAiglTIlz8MS1GO3OL3v.output.matching_strings[0]$",
+              "runtime_user": {
+                "target_default": true
+              },
+              "skip_execution": false,
+              "target": {
+                "use_workflow_target_group": true
+              }
+            },
+            "object_type": "definition_activity"
           }
         ]
       }
@@ -1223,12 +1385,12 @@
     }
   },
   "atomic_workflows": [
-    "definition_workflow_01PP75S3LTBW4420OZU3rdHWKHFnE6aC7yH",
-    "definition_workflow_01PS92J4863DX7ifHF01heFerwmqnoTJ2YI",
     "definition_workflow_01PSAG3UACQ1N38Q4Bns45cYWo4hpBsqNGv",
     "definition_workflow_01PT1JRLJ5QHH3Fb3lctaK2Uqk40TuL4ldW",
-    "definition_workflow_01PT35JR1M1EX3nOhjfiu2AXQ7u1scMmHmf",
     "definition_workflow_01PS8IPKGRMLM4SBCSvH0gnwesjU3qZn8tK",
-    "definition_workflow_01PT3O5HVQHTM4rskgSAYVYEl6EZbT7vZit"
+    "definition_workflow_01PT3O5HVQHTM4rskgSAYVYEl6EZbT7vZit",
+    "definition_workflow_01PT35JR1M1EX3nOhjfiu2AXQ7u1scMmHmf",
+    "definition_workflow_01PS92J4863DX7ifHF01heFerwmqnoTJ2YI",
+    "definition_workflow_01PP75S3LTBW4420OZU3rdHWKHFnE6aC7yH"
   ]
 }
