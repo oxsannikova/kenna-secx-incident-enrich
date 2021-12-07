@@ -45,6 +45,9 @@ In order to leverage Kenna Security malware intelligence for detected vulnerabil
 
 * Secure String: Kenna - Token
 
+## Required Local Variables
+* Update Kenna URL local varilable with your Kenna Security instance domain name (e.g. <customername>.<region>.kennasecurity.com) in order to properly construct pivot links for Kenna pages.
+
 ## Required Atomic Workflows
 
 * Kenna-GetAssetID
