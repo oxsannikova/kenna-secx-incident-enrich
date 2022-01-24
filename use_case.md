@@ -4,6 +4,8 @@ IT operations are still very manual today. Customers are always challenged to ma
 
 ### Watch a demo of this use case [here](https://youtu.be/01iojxIb-_g)!
 
+### Watch a demo of this use case [here](https://youtu.be/01iojxIb-_g)!
+
 ## Features
 
 This workflow periodically checks SecureX incidents for Threat Detected Events from Cisco Secure Endpoint. When an incident is returned, the workflow collects all observations from it and reaches to Kenna Security for vulnerabilities information related to executed malware. If information is returned, the workflow updates the incident in SecureX to document the findings. This workflow is designed to run every 5 minutes on a schedule.
