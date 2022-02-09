@@ -11,7 +11,7 @@ This workflow periodically checks SecureX incidents for Threat Detected Events f
 
 > **Note:** Please test this properly before implementing in a production environment. This is a sample workflow!
 
-## Preprequisites
+## Prerequisites
 
 In order to leverage Kenna Security malware intelligence for detected vulnerabilities, Kenna Security VI+ License is required.
 
